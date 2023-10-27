@@ -13,6 +13,6 @@ HardwareSerial uart4(PA1, PA0);
 GYRO gyro(&bno);
 
 HardwareSerial uart2(PA3, PA2);
-HardwareSerial uart6(PC7, PC6);
+// HardwareSerial uart6(PC7, PC6);
 
 #endif

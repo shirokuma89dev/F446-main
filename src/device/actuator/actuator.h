@@ -4,17 +4,17 @@
 #include "Arduino.h"
 
 #include "buzzer.h"
-#include "led.h"
+#include "motor.h"
 
 Output buzzerPin = Output(PB6);
 BUZZER buzzer(&buzzerPin);
 
 HardwareSerial uart5(PD2, PC12);  // 空きポート
 
-Adafruit_NeoPixel topLED(32, PC1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel uiLED(14, PB14, NEO_GRB + NEO_KHZ800);
-LED led(&topLED, &rightLED, &leftLED, &uiLED);
+Output motorRightPin[2] = {Output(PC7), Output(PC6)};
+Output motorLeftPin[2] = {Output(PC0), Output(PB15)};
+
+MOTOR motorL(&motorLeftPin[0], &motorLeftPin[1]);
+MOTOR motorR(&motorRightPin[0], &motorRightPin[1], true);
 
 #endif

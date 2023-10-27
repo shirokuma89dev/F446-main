@@ -18,12 +18,11 @@ class Output {
     operator float();
 
     void setPWM(int val);
+    void set(bool val);
 
    private:
     int _pinNumber;
     byte _pinStatus;
-
-    void set(bool val);
 
 #ifdef _STM32_DEF_
     bool _pwmExp = false;
