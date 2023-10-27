@@ -40,6 +40,8 @@ void loop() {
      * 従って、コントローラーからの信号を元に
      * commandSpeedを変更できればどのように記述しても良い。
      * コントローラーからの信号がない時は、commandSpeedを変更する必要はない。
+     * 
+     * PC通信用のUARTは、uart1を使用する。
      */
     if (char data = uart1.read() != -1) {
         const char UP = 'w';
