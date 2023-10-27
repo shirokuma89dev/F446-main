@@ -1,6 +1,7 @@
-/** main.cpp
- * これは聖なるメインプログラム
- * あっぱれ！！あっぱれ！！
+/**
+ * main.cpp
+ * コーディングに疲れた時はこれを見て癒されよう
+ * https://youtu.be/yR0SKDxgDMw?si=Dw6psTVlxV8Ese1j
  */
 
 #include <Arduino.h>
@@ -31,6 +32,15 @@ int rcFilter(int _input) {
 void loop() {
     static int commandSpeed = 0;  // 指令値
 
+    /**
+     * To Ditel252:
+     * このコードは、UARTのデータを受信したら、
+     * そのデータに応じてcommandSpeedを変更する
+     *
+     * 従って、コントローラーからの信号を元に
+     * commandSpeedを変更できればどのように記述しても良い。
+     * コントローラーからの信号がない時は、commandSpeedを変更する必要はない。
+     */
     if (char data = uart1.read() != -1) {
         const char UP = 'w';
         const char DOWN = 's';
@@ -50,6 +60,10 @@ void loop() {
                 break;
         }
     }
+    /**
+     * To Ditel252:
+     * ここまで
+     */
 
     // 駆動
     if (commandSpeed != 0) {
