@@ -3,58 +3,64 @@
  * あっぱれ！！あっぱれ！！
  */
 
-// ヘッダファイルの読み込み
-
 #include <Arduino.h>
-
 #include "./device/device.h"
 
 void setup() {
-    motorLeftPin[0] = 0;
-    motorLeftPin[1] = 0;
-    motorRightPin[0] = 0;
-    motorRightPin[1] = 0;
-
     initDevice();
-
     uart1.println("Hello, World!");
 }
-int mode = 0;
-double gain = 0.99;
-int speed = 0;
-unsigned long timer = 0;
+
+int calcControlValue(GYRO *_gyroPtr) {
+    const int Kp = 20.0;
+    const int error = _gyroPtr->read();
+
+    int controlVal = Kp * error;  // Proportional
+
+    return controlVal;
+}
+
+int rcFilter(int _input) {
+    const double gain = 0.99;
+    static int output = 0;
+
+    output = gain * output + (1 - gain) * _input;
+    return output;
+}
 
 void loop() {
-    int offset = gyro.read();
-    offset *= 20;
+    static int commandSpeed = 0;  // 指令値
 
-    uart1.println(offset);
+    if (char data = uart1.read() != -1) {
+        const char UP = 'w';
+        const char DOWN = 's';
+        const char STOP = 'a';
 
-    static int _speed = 0;
-    _speed = gain * _speed + (1 - gain) * speed;
+        switch (data) {
+            case UP:
+                commandSpeed = 255;
+                break;
 
-    if (uart1.available() > 0) {
-        char c = uart1.read();
+            case DOWN:
+                commandSpeed = -255;
+                break;
 
-        if (c == 'w') {
-            mode = 1;
-            speed = 255;
-            timer = millis();
-        } else if (c == 's') {
-            mode = 2;
-            speed = -255;
-            timer = millis();
-        } else if (c == 'a') {
-            mode = 3;
-            speed = 0;
+            case STOP:
+                commandSpeed = 0;
+                break;
         }
     }
 
-    if (mode == 1 || mode == 2) {
-        motorL.drive(_speed - offset);
-        motorR.drive(_speed + offset);
+    // 駆動
+    if (commandSpeed != 0) {
+        int controlVal = calcControlValue(&gyro);
+        int speed = rcFilter(commandSpeed);
+
+        motor[LEFT].drive(speed - controlVal);
+        motor[RIGHT].drive(speed + controlVal);
     } else {
-        motorL.drive(0);
-        motorR.drive(0);
+        for (int i = 0; i < 2; i++) {
+            motor[i].drive(0);
+        }
     }
 }
