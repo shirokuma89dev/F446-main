@@ -1,8 +1,5 @@
 #include "led.h"
 
-#include "../../kit/RTOS-Kit.h"
-extern RTOS_Kit app;
-
 LED::LED(Adafruit_NeoPixel* top, Adafruit_NeoPixel* right,
          Adafruit_NeoPixel* left, Adafruit_NeoPixel* ui) {
     ptrArr[TOP] = top;
@@ -31,36 +28,8 @@ void LED::bootIllumination(void) {
 }
 
 void LED::initCompleteIllumination(void) {
-    unsigned long timer = millis();
-    const int duration = 200;
-
-    while (millis() - timer < duration) {
-        for (int i = 0; i < 4; i++) {
-            int off;
-            switch (i) {
-                case TOP:
-                case UI:
-                    off = map(millis() - timer, 0, duration, 0,
-                              ptrArr[i]->numPixels() / 2);
-
-                    ptrArr[i]->setPixelColor(off, blank);
-                    ptrArr[i]->setPixelColor(ptrArr[i]->numPixels() - off,
-                                             blank);
-                    break;
-
-                default:
-                    off = map(millis() - timer, 0, duration, 0,
-                              ptrArr[i]->numPixels());
-
-                    ptrArr[i]->setPixelColor(off, blank);
-            }
-        }
-
-        showAll();
-    }
-
     for (int i = 0; i < 4; i++) {
-        setColor(i, blank);
+        setColor(i, green);
     }
     showAll();
 }

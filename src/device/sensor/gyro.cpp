@@ -44,19 +44,12 @@ int GYRO::read(void) {
         deg = (int)(event.orientation.x - offset + 360) % 360;
     }
 
-    slope = (int)(event.orientation.y - slopeOffset + 360) % 360;
-
-    if (slope >= 180) {
+    slope = (int)(event.orientation.z - slopeOffset + 360) % 360;
+    if (slope > 180) {
         slope -= 360;
     }
-    slope *= -1;
 
-    if (abs(slope) <= 8) {
-        slope = 0;
-    }
-    direction();
-
-    return deg;
+    return slope;
 }
 
 void GYRO::setOffset(void) {
@@ -70,7 +63,7 @@ void GYRO::setOffset(void) {
         offset = event.orientation.x;
     }
 
-    slopeOffset = event.orientation.y;
+    slopeOffset = event.orientation.z;
 }
 
 void GYRO::direction(void) {

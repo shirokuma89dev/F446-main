@@ -24,23 +24,12 @@ void initI2C(void) {
 }
 
 void initDevice(void) {
-    buzzer.bootSound();
-
-    led.bootIllumination();
-
     initI2C();
     initUART();
 
-    loadcell.init();
-
     gyro.init();
     gyro.setOffset();
-
-    led.initCompleteIllumination();
-    delay(200);
-
-    // // delay(1`)
-
+    
     buzzer.bootSound();
 }
 

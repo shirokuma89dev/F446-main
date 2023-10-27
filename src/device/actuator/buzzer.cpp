@@ -1,9 +1,5 @@
 #include "buzzer.h"
 
-#include "../../kit/RTOS-Kit.h"
-
-extern RTOS_Kit app;
-
 BUZZER::BUZZER(Output *pinPtr) {
     this->pinPtr = pinPtr;
 }
@@ -34,13 +30,11 @@ void BUZZER::beat(int freq, double beat) {
     } else {
         setFrequency(freq);
     }
+    delay((60000.0 / bpm) * beat - interval);
 
-    unsigned long timer = millis() + (60000.0 / bpm) * beat - interval;
-    while (millis() < timer) {
-        app.delay(10);
-    }
     mute();
-    app.delay(interval);
+    
+    delay(interval);
 }
 
 void BUZZER::rescueKit(int kit) {

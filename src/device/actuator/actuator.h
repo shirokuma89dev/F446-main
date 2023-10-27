@@ -5,13 +5,11 @@
 
 #include "buzzer.h"
 #include "led.h"
-#include "sts3032.h"
 
 Output buzzerPin = Output(PB6);
 BUZZER buzzer(&buzzerPin);
 
-HardwareSerial uart5(PD2, PC12);
-STS3032 servo(&uart5);
+HardwareSerial uart5(PD2, PC12);  // 空きポート
 
 Adafruit_NeoPixel topLED(32, PC1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
